@@ -1,6 +1,5 @@
-from django.shortcuts import redirect, render
-
-from inventory.models import Product
+from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render
 from inventory.forms import ProductForm
 from .models import Product
 
@@ -18,3 +17,16 @@ def add_product(request):
         form = ProductForm()
     
     return render(request, 'inventory/add_product.html', {'form': form})
+
+def update_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product) 
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+    
+    return render(request, 'inventory/add_product.html', {'form': form})
+
