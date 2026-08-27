@@ -30,3 +30,11 @@ def update_product(request, pk):
     
     return render(request, 'inventory/add_product.html', {'form': form})
 
+
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk) 
+    if request.method == 'POST':
+        product.delete() 
+        return redirect('product_list') 
+    
+    return render(request, 'inventory/delete_confirm.html', {'product': product})
